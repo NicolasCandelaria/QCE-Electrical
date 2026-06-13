@@ -29,6 +29,7 @@
     --pad-x:clamp(1.25rem,5vw,3rem);
     --section-y:clamp(4.5rem,9vw,8rem);
     --radius:14px;
+    --live:#FFD60A;
   }
 
   *{box-sizing:border-box;margin:0;padding:0}
@@ -158,9 +159,9 @@
   }
   .panel-card__top{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line-dark);padding-bottom:.85rem;margin-bottom:.85rem}
   .panel-card__title{font-size:.72rem;letter-spacing:.14em;color:rgba(255,255,255,.6)}
-  .live{display:inline-flex;align-items:center;gap:.45em;font-size:.68rem;letter-spacing:.12em;color:var(--current)}
-  .live i{width:7px;height:7px;border-radius:50%;background:var(--current);box-shadow:0 0 0 0 rgba(10,80,255,.6);animation:blink 1.8s infinite}
-  @keyframes blink{0%{box-shadow:0 0 0 0 rgba(10,80,255,.6)}70%{box-shadow:0 0 0 7px rgba(10,80,255,0)}100%{box-shadow:0 0 0 0 rgba(10,80,255,0)}}
+  .live{display:inline-flex;align-items:center;gap:.45em;font-size:.68rem;letter-spacing:.12em;color:var(--live)}
+  .live i{width:7px;height:7px;border-radius:50%;background:var(--live);box-shadow:0 0 0 0 rgba(255,214,10,.55);animation:blink 1.8s infinite}
+  @keyframes blink{0%{box-shadow:0 0 0 0 rgba(255,214,10,.55)}70%{box-shadow:0 0 0 7px rgba(255,214,10,0)}100%{box-shadow:0 0 0 0 rgba(255,214,10,0)}}
   .panel-row{display:flex;justify-content:space-between;gap:1rem;padding:.42rem 0;font-size:.78rem}
   .panel-row span{color:rgba(255,255,255,.55)}
   .panel-row b{font-weight:700}
@@ -313,8 +314,15 @@
     .circuit__desc{grid-column:1 / -1}
     .hero__wire{display:none}
     .hero__grid{opacity:.32;background-size:30px 30px}
+    .specstrip__row{
+      display:grid;grid-template-columns:1fr 1fr;gap:.85rem 1.25rem;
+      padding:1.25rem 0;justify-content:start;
+    }
+    .specstrip__item{font-size:.68rem;line-height:1.35}
   }
   @media (max-width:560px){
+    .specstrip__row{grid-template-columns:1fr;gap:.75rem;padding:1.15rem 0}
+    .specstrip__item{max-width:100%}
     .two{grid-template-columns:1fr}
     .footer-top{grid-template-columns:1fr}
     .steps{grid-template-columns:1fr}
@@ -348,7 +356,6 @@
       <ul class="nav__links" id="navlinks">
         <li><a class="nav__link" href="#home" data-route="home">Home</a></li>
         <li><a class="nav__link" href="#about" data-route="about">About</a></li>
-        <li><a class="nav__link" href="#contact" data-route="contact">Contact</a></li>
         <li><a class="nav__cta" href="#contact" data-route="contact">Book a diagnostic</a></li>
       </ul>
     </nav>
