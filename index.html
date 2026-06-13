@@ -315,14 +315,12 @@
     .hero__wire{display:none}
     .hero__grid{opacity:.32;background-size:30px 30px}
     .specstrip__row{
-      display:grid;grid-template-columns:1fr 1fr;gap:.85rem 1.25rem;
-      padding:1.25rem 0;justify-content:start;
+      display:flex;flex-direction:column;align-items:center;gap:.75rem;
+      padding:1.25rem 0;
     }
-    .specstrip__item{font-size:.68rem;line-height:1.35}
+    .specstrip__item{justify-content:center;font-size:.68rem;line-height:1.35;text-align:center}
   }
   @media (max-width:560px){
-    .specstrip__row{grid-template-columns:1fr;gap:.75rem;padding:1.15rem 0}
-    .specstrip__item{max-width:100%}
     .two{grid-template-columns:1fr}
     .footer-top{grid-template-columns:1fr}
     .steps{grid-template-columns:1fr}
