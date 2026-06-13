@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<title>QCE — Quality Control Electrical · Vancouver, BC</title>
+<meta name="description" content="QCE is a licensed Vancouver electrical contractor for homes and small institutions. Panel upgrades, rewiring, EV chargers, and fast diagnostics, completed to BC electrical code.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0B0B0C;
+    --paper:#F4F5F7;
+    --white:#FFFFFF;
+    --current:#0A50FF;
+    --current-deep:#0A37B8;
+    --navy:#0A1430;
+    --steel:#6A7080;
+    --line:#E4E5E9;
+    --line-dark:rgba(255,255,255,.12);
+
+    --display:'Space Grotesk',system-ui,sans-serif;
+    --body:'Inter',system-ui,sans-serif;
+    --mono:'Space Mono',ui-monospace,monospace;
+
+    --container:1240px;
+    --pad-x:clamp(1.25rem,5vw,3rem);
+    --section-y:clamp(4.5rem,9vw,8rem);
+    --radius:14px;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;color-scheme:light}
+  body{
+    font-family:var(--body);
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.6;
+    font-size:clamp(1rem,.97rem + .2vw,1.0625rem);
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  img{max-width:100%;display:block}
+  a{color:inherit;text-decoration:none}
+  button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
+
+  ::selection{background:var(--current);color:#fff}
+
+  :focus-visible{outline:2.5px solid var(--current);outline-offset:3px;border-radius:2px}
+
+  .container{max-width:var(--container);margin:0 auto;padding-inline:var(--pad-x)}
+
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:.72rem;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--steel);
+    display:inline-flex;align-items:center;gap:.6em;
+  }
+  .eyebrow::before{content:"";width:22px;height:1.5px;background:var(--current);display:inline-block}
+  .eyebrow.is-light{color:rgba(255,255,255,.62)}
+
+  h1,h2,h3{font-family:var(--display);font-weight:700;line-height:1.02;letter-spacing:-.02em}
+
+  .skip{position:absolute;left:-9999px;top:0;background:var(--ink);color:#fff;padding:.75rem 1rem;z-index:200;border-radius:0 0 8px 0}
+  .skip:focus{left:0}
+
+  /* ===== LOGO MARK ===== */
+  .mark{height:26px;width:auto;color:var(--ink);display:block;flex:none}
+  .mark .bolt{fill:var(--current)}
+  .lockup{color:var(--ink)}
+  .lockup .tag,.lockup .rule{fill:none}
+  .on-dark .mark,.on-dark .lockup{color:#fff}
+
+  /* ===== HEADER ===== */
+  .site-header{
+    position:sticky;top:0;z-index:100;
+    background:rgba(244,245,247,.82);
+    backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{display:flex;align-items:center;justify-content:space-between;gap:1.5rem;height:72px}
+  .nav__logo{display:flex;align-items:center}
+  .nav__links{display:flex;align-items:center;gap:2rem;list-style:none}
+  .nav__link{
+    font-family:var(--mono);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--ink);position:relative;padding:.4rem 0;transition:color .2s;
+  }
+  .nav__link::after{content:"";position:absolute;left:0;bottom:-2px;height:2px;width:0;background:var(--current);transition:width .25s ease}
+  .nav__link:hover{color:var(--current-deep)}
+  .nav__link[aria-current="page"]{color:var(--current-deep)}
+  .nav__link[aria-current="page"]::after{width:100%}
+  .nav__cta{
+    background:var(--current);color:#fff;padding:.7rem 1.2rem;border-radius:999px;
+    font-family:var(--mono);font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;font-weight:700;
+    transition:background .2s,transform .2s;white-space:nowrap;
+  }
+  .nav__cta:hover{background:var(--current-deep);transform:translateY(-1px)}
+  .nav__toggle{display:none;width:44px;height:44px;border:1px solid var(--line);border-radius:10px;align-items:center;justify-content:center}
+  .nav__toggle span{display:block;width:18px;height:2px;background:var(--ink);position:relative;transition:.25s}
+  .nav__toggle span::before,.nav__toggle span::after{content:"";position:absolute;left:0;width:18px;height:2px;background:var(--ink);transition:.25s}
+  .nav__toggle span::before{top:-6px}.nav__toggle span::after{top:6px}
+  body.menu-open .nav__toggle span{background:transparent}
+  body.menu-open .nav__toggle span::before{top:0;transform:rotate(45deg)}
+  body.menu-open .nav__toggle span::after{top:0;transform:rotate(-45deg)}
+
+  /* ===== PAGE ROUTING ===== */
+  .page{display:none}
+  .page.is-active{display:block;animation:pagein .4s ease}
+  @keyframes pagein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  /* ===== HERO ===== */
+  .hero{position:relative;overflow:hidden;background:var(--paper);padding-top:clamp(3rem,6vw,5rem);padding-bottom:clamp(3rem,6vw,5rem)}
+  .hero__grid{
+    position:absolute;inset:0;z-index:0;pointer-events:none;
+    background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+    background-size:36px 36px;
+    -webkit-mask-image:radial-gradient(78% 72% at 100% 0%,#000 0%,rgba(0,0,0,.4) 44%,transparent 72%);
+    mask-image:radial-gradient(78% 72% at 100% 0%,#000 0%,rgba(0,0,0,.4) 44%,transparent 72%);
+    opacity:.55;
+  }
+  .hero__wire{position:absolute;inset:0;z-index:1;pointer-events:none;width:100%;height:100%}
+  .hero__wire path{fill:none;stroke:var(--current);stroke-width:2;stroke-linecap:square;opacity:.5;
+    stroke-dasharray:2600;stroke-dashoffset:2600;animation:draw 3s ease forwards .3s}
+  .hero__wire .node{fill:var(--current);filter:drop-shadow(0 0 6px rgba(10,80,255,.85))}
+  .hero__wire .spark{fill:#fff;opacity:0;animation:spark 3s ease forwards .3s}
+  @keyframes draw{to{stroke-dashoffset:0}}
+  @keyframes spark{0%,88%{opacity:0}92%{opacity:1}100%{opacity:.9}}
+
+  .hero__inner{position:relative;z-index:3;display:grid;grid-template-columns:1.55fr .85fr;gap:clamp(2rem,5vw,4rem);align-items:end}
+  .hero h1{font-size:clamp(3rem,9.5vw,7rem);margin:1.4rem 0 0}
+  .hero h1 .blue{color:var(--current)}
+  .hero__lead{max-width:46ch;margin-top:1.6rem;color:#2a2d33;font-size:clamp(1.05rem,1rem + .4vw,1.3rem);line-height:1.55}
+  .hero__actions{display:flex;flex-wrap:wrap;gap:1rem;align-items:center;margin-top:2.2rem}
+  .btn{
+    display:inline-flex;align-items:center;gap:.6em;padding:.95rem 1.6rem;border-radius:999px;
+    font-family:var(--mono);font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;font-weight:700;
+    transition:transform .2s,background .2s,color .2s,border-color .2s;
+  }
+  .btn--primary{background:var(--current);color:#fff}
+  .btn--primary:hover{background:var(--current-deep);transform:translateY(-2px)}
+  .btn--ghost{border:1.5px solid var(--ink);color:var(--ink)}
+  .btn--ghost:hover{background:var(--ink);color:#fff}
+  .btn--on-dark{border:1.5px solid rgba(255,255,255,.5);color:#fff}
+  .btn--on-dark:hover{background:#fff;color:var(--navy);border-color:#fff}
+  .btn .arr{transition:transform .2s}
+  .btn:hover .arr{transform:translateX(3px)}
+  .hero__phone{display:flex;flex-direction:column;font-family:var(--mono)}
+  .hero__phone b{font-size:1.05rem;letter-spacing:.02em}
+  .hero__phone small{color:var(--steel);font-size:.72rem;letter-spacing:.04em;margin-top:.15rem}
+
+  .panel-card{
+    background:var(--navy);color:#fff;border-radius:var(--radius);padding:1.4rem 1.4rem 1.5rem;
+    font-family:var(--mono);box-shadow:0 30px 60px -30px rgba(10,20,48,.55);
+  }
+  .panel-card__top{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line-dark);padding-bottom:.85rem;margin-bottom:.85rem}
+  .panel-card__title{font-size:.72rem;letter-spacing:.14em;color:rgba(255,255,255,.6)}
+  .live{display:inline-flex;align-items:center;gap:.45em;font-size:.68rem;letter-spacing:.12em;color:var(--current)}
+  .live i{width:7px;height:7px;border-radius:50%;background:var(--current);box-shadow:0 0 0 0 rgba(10,80,255,.6);animation:blink 1.8s infinite}
+  @keyframes blink{0%{box-shadow:0 0 0 0 rgba(10,80,255,.6)}70%{box-shadow:0 0 0 7px rgba(10,80,255,0)}100%{box-shadow:0 0 0 0 rgba(10,80,255,0)}}
+  .panel-row{display:flex;justify-content:space-between;gap:1rem;padding:.42rem 0;font-size:.78rem}
+  .panel-row span{color:rgba(255,255,255,.55)}
+  .panel-row b{font-weight:700}
+
+  /* ===== SPEC STRIP ===== */
+  .specstrip{background:var(--navy);color:#fff}
+  .specstrip__row{display:flex;flex-wrap:wrap;gap:1rem 2.5rem;padding:1.15rem 0;justify-content:space-between}
+  .specstrip__item{font-family:var(--mono);font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;display:flex;align-items:center;gap:.6em;color:rgba(255,255,255,.85)}
+  .specstrip__item::before{content:"";width:6px;height:6px;background:var(--current);border-radius:1px;flex:none}
+
+  /* ===== SECTIONS ===== */
+  .section{padding-block:var(--section-y)}
+  .section--white{background:var(--white)}
+  .section__head{max-width:62ch;margin-bottom:clamp(2.5rem,5vw,3.5rem)}
+  .section__head h2{font-size:clamp(2rem,4.6vw,3.4rem);margin:1rem 0 .9rem}
+  .section__head p{color:#3a3d44;max-width:52ch}
+
+  /* ===== CIRCUIT DIRECTORY ===== */
+  .directory{border-top:1px solid var(--line)}
+  .circuit{
+    display:grid;grid-template-columns:auto 1.1fr 2fr;gap:1.5rem 2rem;align-items:baseline;
+    padding:1.7rem 1rem 1.7rem .25rem;border-bottom:1px solid var(--line);position:relative;
+    transition:background .25s,padding-left .25s;
+  }
+  .circuit::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--current);transform:scaleY(0);transform-origin:top;transition:transform .28s ease}
+  .circuit:hover{background:#fafbff;padding-left:1.1rem}
+  .circuit:hover::before{transform:scaleY(1)}
+  .circuit__no{font-family:var(--mono);font-weight:700;font-size:.95rem;color:var(--steel);transition:color .25s}
+  .circuit:hover .circuit__no{color:var(--current)}
+  .circuit__name{font-family:var(--display);font-weight:600;font-size:clamp(1.15rem,1rem + .8vw,1.55rem);letter-spacing:-.01em}
+  .circuit__desc{color:#42464d}
+  .circuit__desc .price{font-family:var(--mono);font-size:.8rem;color:var(--current-deep);display:inline-block;margin-top:.4rem;letter-spacing:.02em}
+
+  /* ===== PROCESS ===== */
+  .process{background:var(--paper)}
+  .steps{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+  .step{background:var(--white);padding:1.6rem 1.3rem 1.8rem;display:flex;flex-direction:column;gap:.6rem;position:relative}
+  .step__no{font-family:var(--mono);font-size:.74rem;letter-spacing:.1em;color:var(--current);font-weight:700}
+  .step h3{font-size:1.15rem;letter-spacing:-.01em}
+  .step p{font-size:.9rem;color:#42464d;line-height:1.5}
+
+  /* ===== STATS BAND ===== */
+  .stats{background:var(--navy);color:#fff}
+  .stats__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem 1rem}
+  .stat__num{font-family:var(--display);font-weight:700;font-size:clamp(2.4rem,5vw,3.8rem);line-height:1;letter-spacing:-.03em}
+  .stat__num em{font-style:normal;color:var(--current)}
+  .stat__label{font-family:var(--mono);font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-top:.7rem}
+
+  /* ===== CTA BAND ===== */
+  .ctaband{padding-block:var(--section-y)}
+  .ctaband__inner{
+    background:var(--current);color:#fff;border-radius:20px;
+    padding:clamp(2.4rem,5vw,4rem);display:flex;flex-wrap:wrap;gap:2rem;align-items:center;justify-content:space-between;
+    position:relative;overflow:hidden;
+  }
+  .ctaband__inner::after{content:"";position:absolute;right:-60px;top:-60px;width:280px;height:280px;border:40px solid rgba(255,255,255,.08);border-radius:50%}
+  .ctaband h2{font-size:clamp(1.8rem,4vw,3rem);max-width:18ch;position:relative;z-index:1}
+  .ctaband p{margin-top:.7rem;max-width:40ch;color:rgba(255,255,255,.9);position:relative;z-index:1}
+  .ctaband .btn--ondark-solid{background:#fff;color:var(--current-deep);position:relative;z-index:1}
+  .ctaband .btn--ondark-solid:hover{background:var(--ink);color:#fff;transform:translateY(-2px)}
+
+  /* ===== ABOUT ===== */
+  .about-hero{position:relative;overflow:hidden;padding-top:clamp(3.5rem,6vw,5.5rem);padding-bottom:clamp(2rem,4vw,3rem)}
+  .about-hero h1{font-size:clamp(2.4rem,6.5vw,5rem);max-width:16ch;margin-top:1.2rem}
+  .prose{display:grid;grid-template-columns:1fr 1fr;gap:clamp(1.5rem,4vw,3.5rem)}
+  .prose p{color:#33363d;font-size:1.08rem;line-height:1.65}
+  .prose p + p{margin-top:1.1rem}
+  .standards{list-style:none;display:grid;gap:1px;background:var(--line);border-block:1px solid var(--line)}
+  .standards li{background:var(--paper);padding:1.15rem .2rem;display:flex;gap:1rem;align-items:flex-start;font-size:1.02rem}
+  .standards li b{font-family:var(--mono);color:var(--current);font-size:.85rem;flex:none;width:2.2rem}
+  .area-list{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1.4rem}
+  .area-list span{font-family:var(--mono);font-size:.8rem;letter-spacing:.04em;border:1px solid var(--line);background:var(--white);padding:.5rem .9rem;border-radius:999px}
+  .area-note{margin-top:1.4rem;color:#42464d;max-width:48ch}
+
+  /* ===== CONTACT ===== */
+  .contact-hero{position:relative;overflow:hidden;padding-top:clamp(3.5rem,6vw,5.5rem)}
+  .contact-hero h1{font-size:clamp(2.4rem,6.5vw,5rem);max-width:14ch;margin-top:1.2rem}
+  .contact-hero p{margin-top:1.3rem;max-width:50ch;color:#33363d;font-size:1.1rem}
+  .contact-grid{display:grid;grid-template-columns:1.4fr .9fr;gap:clamp(2rem,5vw,4rem);padding-bottom:var(--section-y);align-items:start}
+
+  .form{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:clamp(1.4rem,3vw,2.4rem)}
+  .field{margin-bottom:1.3rem}
+  .field label{display:block;font-family:var(--mono);font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);margin-bottom:.5rem}
+  .field label .req{color:var(--current)}
+  .field input,.field select,.field textarea{
+    width:100%;font:inherit;color:var(--ink);background:var(--paper);
+    border:1.5px solid var(--line);border-radius:9px;padding:.8rem .9rem;transition:border-color .2s,background .2s;
+  }
+  .field textarea{resize:vertical;min-height:130px}
+  .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--current);background:#fff;outline:none}
+  .field input[aria-invalid="true"],.field select[aria-invalid="true"],.field textarea[aria-invalid="true"]{border-color:#d33;background:#fff5f5}
+  .field .error{display:none;color:#c62828;font-size:.8rem;margin-top:.4rem;font-family:var(--mono);letter-spacing:.02em}
+  .field .error.show{display:block}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:1.3rem}
+  .radios{display:flex;gap:1.5rem;flex-wrap:wrap}
+  .radios label{display:flex;align-items:center;gap:.5rem;text-transform:none;letter-spacing:0;font-family:var(--body);font-size:1rem;color:#33363d;cursor:pointer}
+  .radios input{width:auto;accent-color:var(--current)}
+  .form__submit{width:100%;background:var(--current);color:#fff;border-radius:999px;padding:1rem;font-family:var(--mono);font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;font-weight:700;transition:background .2s,transform .2s}
+  .form__submit:hover{background:var(--current-deep);transform:translateY(-1px)}
+
+  .form-success{display:none;text-align:left}
+  .form-success.show{display:block;animation:pagein .4s ease}
+  .form-success .tick{width:54px;height:54px;border-radius:50%;background:var(--current);display:flex;align-items:center;justify-content:center;margin-bottom:1.2rem}
+  .form-success .tick svg{stroke:#fff;stroke-width:3;fill:none}
+  .form-success h3{font-size:1.5rem;margin-bottom:.6rem}
+  .form-success p{color:#33363d;max-width:42ch}
+  .form-success button{margin-top:1.4rem;font-family:var(--mono);font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--current-deep);border-bottom:2px solid var(--current);padding-bottom:2px}
+
+  .infocard{background:var(--navy);color:#fff;border-radius:var(--radius);padding:clamp(1.4rem,3vw,2rem)}
+  .infocard h3{font-size:1.1rem;margin-bottom:1.4rem}
+  .inforow{padding:1rem 0;border-top:1px solid var(--line-dark)}
+  .inforow:first-of-type{border-top:none}
+  .inforow .k{font-family:var(--mono);font-size:.7rem;letter-spacing:.12em;color:rgba(255,255,255,.55);text-transform:uppercase;display:block;margin-bottom:.3rem}
+  .inforow .v{font-size:1.02rem}
+  .inforow a.v:hover{color:var(--current)}
+
+  /* ===== FOOTER ===== */
+  .site-footer{background:var(--navy);color:#fff;padding-block:clamp(3rem,6vw,4.5rem) 2rem}
+  .footer-top{display:grid;grid-template-columns:1.4fr repeat(3,1fr);gap:2.5rem;padding-bottom:2.5rem;border-bottom:1px solid var(--line-dark)}
+  .footer-brand p{color:rgba(255,255,255,.6);margin-top:1.2rem;max-width:34ch;font-size:.95rem}
+  .footer-col h4{font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:1rem}
+  .footer-col ul{list-style:none;display:grid;gap:.7rem}
+  .footer-col a{color:rgba(255,255,255,.82);font-size:.95rem;transition:color .2s}
+  .footer-col a:hover{color:var(--current)}
+  .footer-bottom{display:flex;flex-wrap:wrap;gap:.7rem 2rem;justify-content:space-between;padding-top:1.8rem;font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;color:rgba(255,255,255,.5)}
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width:900px){
+    .hero__inner{grid-template-columns:1fr}
+    .panel-card{max-width:420px}
+    .prose{grid-template-columns:1fr}
+    .contact-grid{grid-template-columns:1fr}
+    .footer-top{grid-template-columns:1fr 1fr}
+    .steps{grid-template-columns:repeat(2,1fr)}
+    .stats__grid{grid-template-columns:repeat(2,1fr)}
+  }
+  @media (max-width:760px){
+    .nav__links{
+      position:fixed;inset:72px 0 auto 0;background:var(--paper);flex-direction:column;align-items:stretch;
+      gap:0;padding:1rem var(--pad-x) 1.6rem;border-bottom:1px solid var(--line);
+      transform:translateY(-130%);transition:transform .3s ease;box-shadow:0 24px 40px -24px rgba(0,0,0,.25);
+    }
+    .nav__links li{width:100%}
+    body.menu-open .nav__links{transform:translateY(0)}
+    .nav__link{display:block;width:100%;padding:.95rem 0;border-bottom:1px solid var(--line);font-size:.9rem}
+    .nav__link::after{display:none}
+    .nav__links .nav__cta{display:block;text-align:center;margin-top:1.1rem;width:100%}
+    .nav__toggle{display:flex}
+    .circuit{grid-template-columns:auto 1fr;gap:.5rem 1.1rem}
+    .circuit__desc{grid-column:1 / -1}
+    .hero__wire{display:none}
+    .hero__grid{opacity:.32;background-size:30px 30px}
+  }
+  @media (max-width:560px){
+    .two{grid-template-columns:1fr}
+    .footer-top{grid-template-columns:1fr}
+    .steps{grid-template-columns:1fr}
+    .stats__grid{grid-template-columns:1fr 1fr}
+    .ctaband__inner{flex-direction:column;align-items:flex-start}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none !important;transition:none !important;scroll-behavior:auto !important}
+    .hero__wire path{stroke-dashoffset:0}
+    .reveal{opacity:1 !important;transform:none !important}
+  }
+
+  /* scroll reveal */
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .6s ease,transform .6s ease}
+  .reveal.is-visible{opacity:1;transform:none}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="container nav">
+    <a class="nav__logo" href="#home" data-route="home" aria-label="QCE, Quality Control Electrical, home">
+      <svg class="mark" viewBox="0 0 138 30" role="img" aria-label="QCE">
+        <text x="0" y="25" font-family="'Space Grotesk',sans-serif" font-weight="700" font-size="30" letter-spacing="-1" fill="currentColor">QCE</text>
+        <path class="bolt" d="M14.5 5 L7.5 17 L12 17 L8.5 26 L20 13.5 L14.6 13.5 L19 5 Z"/>
+      </svg>
+    </a>
+    <nav>
+      <ul class="nav__links" id="navlinks">
+        <li><a class="nav__link" href="#home" data-route="home">Home</a></li>
+        <li><a class="nav__link" href="#about" data-route="about">About</a></li>
+        <li><a class="nav__link" href="#contact" data-route="contact">Contact</a></li>
+        <li><a class="nav__cta" href="#contact" data-route="contact">Book a diagnostic</a></li>
+      </ul>
+    </nav>
+    <button class="nav__toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navlinks"><span></span></button>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ========================= HOME ========================= -->
+  <section class="page is-active" id="home" aria-label="Home">
+
+    <div class="hero">
+      <div class="hero__grid" aria-hidden="true"></div>
+      <svg class="hero__wire" viewBox="0 0 900 360" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <path d="M -40 130 H 200 V 64 H 360 V 230 H 560 V 150 H 900"/>
+        <circle class="node" cx="200" cy="64" r="4"/>
+        <circle class="node" cx="360" cy="230" r="4"/>
+        <circle class="node" cx="560" cy="150" r="4"/>
+        <circle class="spark" cx="560" cy="150" r="7"/>
+      </svg>
+
+      <div class="container hero__inner">
+        <div>
+          <span class="eyebrow">Licensed electrical contractor · Vancouver, BC</span>
+          <h1>Wired right.<br>Checked <span class="blue">twice.</span></h1>
+          <p class="hero__lead">QCE is a licensed Vancouver electrical contractor for homes and small institutions. Panel upgrades, rewiring, EV chargers, and fast diagnostics, completed to BC electrical code.</p>
+          <div class="hero__actions">
+            <a class="btn btn--primary" href="#contact" data-route="contact">Book a diagnostic <span class="arr">→</span></a>
+            <a class="hero__phone" href="tel:+16045550142">
+              <b>(604) 555-0142</b>
+              <small>Mon to Fri, 7:30 to 5:00</small>
+            </a>
+          </div>
+        </div>
+        <aside class="panel-card reveal" aria-label="Current availability">
+          <div class="panel-card__top">
+            <span class="panel-card__title">SERVICE PANEL</span>
+            <span class="live"><i></i>LIVE</span>
+          </div>
+          <div class="panel-row"><span>Booking</span><b>This week</b></div>
+          <div class="panel-row"><span>License</span><b>FSR Class A</b></div>
+          <div class="panel-row"><span>Warranty</span><b>12 months</b></div>
+          <div class="panel-row"><span>Response</span><b>&lt; 1 business day</b></div>
+          <div class="panel-row"><span>Area</span><b>Lower Mainland</b></div>
+        </aside>
+      </div>
+    </div>
+
+    <div class="specstrip">
+      <div class="container specstrip__row">
+        <span class="specstrip__item">Licensed &amp; insured</span>
+        <span class="specstrip__item">Same-week booking</span>
+        <span class="specstrip__item">12-month workmanship warranty</span>
+        <span class="specstrip__item">BC code compliant</span>
+      </div>
+    </div>
+
+    <div class="section section--white">
+      <div class="container">
+        <div class="section__head reveal">
+          <span class="eyebrow">Services</span>
+          <h2>A directory of what we do.</h2>
+          <p>Residential first, with small institutional troubleshooting on call. Every job leaves tested and to code.</p>
+        </div>
+        <div class="directory">
+          <div class="circuit reveal">
+            <div class="circuit__no">01</div>
+            <div class="circuit__name">Panel upgrades &amp; service changes</div>
+            <div class="circuit__desc">100A and 200A upgrades, panel replacements, and service changes, with permits pulled.</div>
+          </div>
+          <div class="circuit reveal">
+            <div class="circuit__no">02</div>
+            <div class="circuit__name">Rewiring &amp; repairs</div>
+            <div class="circuit__desc">Knob-and-tube replacement, circuit repairs, and safe rewires for older Vancouver homes.</div>
+          </div>
+          <div class="circuit reveal">
+            <div class="circuit__no">03</div>
+            <div class="circuit__name">EV charger installation</div>
+            <div class="circuit__desc">Level 2 home charger installs sized to your panel.<br><span class="price">From $899 CAD</span></div>
+          </div>
+          <div class="circuit reveal">
+            <div class="circuit__no">04</div>
+            <div class="circuit__name">Lighting &amp; fixtures</div>
+            <div class="circuit__desc">Pot lights, fixtures, dimmers, and outdoor lighting, installed clean.</div>
+          </div>
+          <div class="circuit reveal">
+            <div class="circuit__no">05</div>
+            <div class="circuit__name">Diagnostics &amp; troubleshooting</div>
+            <div class="circuit__desc">Dead circuits, tripping breakers, and flickering lights traced to the source.<br><span class="price">Diagnostic visit from $149 CAD</span></div>
+          </div>
+          <div class="circuit reveal">
+            <div class="circuit__no">06</div>
+            <div class="circuit__name">Institutional troubleshooting</div>
+            <div class="circuit__desc">Small-scale service for schools, clinics, and offices. Fast response on faults and failures.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section process">
+      <div class="container">
+        <div class="section__head reveal">
+          <span class="eyebrow">The QC standard</span>
+          <h2>How a QCE job runs.</h2>
+          <p>The name is the method. Work is checked against the same standard an inspector would run before we sign off.</p>
+        </div>
+        <div class="steps reveal">
+          <div class="step"><span class="step__no">STEP 01</span><h3>Diagnose</h3><p>We find the actual fault, not the symptom.</p></div>
+          <div class="step"><span class="step__no">STEP 02</span><h3>Quote</h3><p>A clear, fixed quote in CAD before any work starts.</p></div>
+          <div class="step"><span class="step__no">STEP 03</span><h3>Install</h3><p>Licensed electricians, permits pulled where required.</p></div>
+          <div class="step"><span class="step__no">STEP 04</span><h3>Test</h3><p>Every circuit checked under load before we pack up.</p></div>
+          <div class="step"><span class="step__no">STEP 05</span><h3>Sign off</h3><p>Inspection-ready work and a 12-month warranty.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section stats">
+      <div class="container">
+        <div class="stats__grid">
+          <div class="stat reveal"><div class="stat__num">Since <em>2014</em></div><div class="stat__label">Wiring Vancouver</div></div>
+          <div class="stat reveal"><div class="stat__num">2,400<em>+</em></div><div class="stat__label">Jobs completed</div></div>
+          <div class="stat reveal"><div class="stat__num">&lt;1 <em>day</em></div><div class="stat__label">Quote turnaround</div></div>
+          <div class="stat reveal"><div class="stat__num">12 <em>mo</em></div><div class="stat__label">Workmanship warranty</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ctaband">
+      <div class="container">
+        <div class="ctaband__inner reveal">
+          <div>
+            <h2>Need a problem solved this week?</h2>
+            <p>Tell us what is going on and we will get back within one business day.</p>
+          </div>
+          <a class="btn btn--ondark-solid" href="#contact" data-route="contact">Request a quote <span class="arr">→</span></a>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ========================= ABOUT ========================= -->
+  <section class="page" id="about" aria-label="About">
+    <div class="about-hero">
+      <div class="hero__grid" aria-hidden="true"></div>
+      <div class="container" style="position:relative;z-index:3">
+        <span class="eyebrow">About QCE</span>
+        <h1>We treat every home like it is on inspection.</h1>
+      </div>
+    </div>
+
+    <div class="section section--white">
+      <div class="container">
+        <div class="prose reveal">
+          <div>
+            <p>QCE started in Vancouver with one rule. No job leaves until it passes the same check an inspector would run. That is where the name comes from. Quality control is the work, not a slogan on the van.</p>
+            <p>We focus on residential electrical for houses, strata units, and laneway homes across the Lower Mainland. Alongside that, we take small institutional troubleshooting for schools, clinics, and offices that need a fault found fast.</p>
+          </div>
+          <div>
+            <p>The crew is licensed electricians who pull permits, label their work, and clean up before they leave. You get a clear quote in CAD, a tested result, and a warranty that means something.</p>
+            <p>No upsells on work you do not need. We tell you what is safe, what is urgent, and what can wait, then we let you decide.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section process">
+      <div class="container">
+        <div class="section__head reveal">
+          <span class="eyebrow">Our standard</span>
+          <h2>What we hold ourselves to.</h2>
+        </div>
+        <ul class="standards reveal">
+          <li><b>01</b><span>Licensed and insured electricians on every job.</span></li>
+          <li><b>02</b><span>Permits pulled where the work calls for it.</span></li>
+          <li><b>03</b><span>Every circuit tested under load before sign-off.</span></li>
+          <li><b>04</b><span>Fixed quotes in CAD, with no surprise line items.</span></li>
+          <li><b>05</b><span>Clean job sites, every day we are there.</span></li>
+          <li><b>06</b><span>A 12-month workmanship warranty in writing.</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section section--white">
+      <div class="container">
+        <div class="section__head reveal">
+          <span class="eyebrow">Coverage</span>
+          <h2>Where we work.</h2>
+          <p>Vancouver and the Lower Mainland.</p>
+        </div>
+        <div class="reveal">
+          <div class="area-list">
+            <span>Vancouver</span><span>Burnaby</span><span>Richmond</span>
+            <span>North Vancouver</span><span>West Vancouver</span><span>New Westminster</span>
+          </div>
+          <p class="area-note">Outside the list? Ask. If we can get to you and do the job right, we will.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section stats">
+      <div class="container">
+        <div class="stats__grid">
+          <div class="stat reveal"><div class="stat__num">Since <em>2014</em></div><div class="stat__label">Serving the Lower Mainland</div></div>
+          <div class="stat reveal"><div class="stat__num">2,400<em>+</em></div><div class="stat__label">Jobs completed</div></div>
+          <div class="stat reveal"><div class="stat__num">100<em>%</em></div><div class="stat__label">Licensed electricians</div></div>
+          <div class="stat reveal"><div class="stat__num">12 <em>mo</em></div><div class="stat__label">Workmanship warranty</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ctaband">
+      <div class="container">
+        <div class="ctaband__inner reveal">
+          <div>
+            <h2>Ready to book?</h2>
+            <p>Send the details. We will get back within one business day.</p>
+          </div>
+          <a class="btn btn--ondark-solid" href="#contact" data-route="contact">Get in touch <span class="arr">→</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================= CONTACT ========================= -->
+  <section class="page" id="contact" aria-label="Contact">
+    <div class="contact-hero">
+      <div class="hero__grid" aria-hidden="true"></div>
+      <div class="container" style="position:relative;z-index:3">
+        <span class="eyebrow">Contact</span>
+        <h1>Tell us what is going on.</h1>
+        <p>Send the details and we will get back within one business day. For live faults or no power, call the line below.</p>
+      </div>
+    </div>
+
+    <div class="section section--white" style="padding-top:clamp(2.5rem,5vw,4rem)">
+      <div class="container contact-grid">
+        <div>
+          <form class="form" id="quoteForm" novalidate>
+            <div class="two">
+              <div class="field">
+                <label for="name">Full name <span class="req">*</span></label>
+                <input type="text" id="name" name="name" autocomplete="name">
+                <span class="error" data-for="name">Please enter your name.</span>
+              </div>
+              <div class="field">
+                <label for="phone">Phone <span class="req">*</span></label>
+                <input type="tel" id="phone" name="phone" autocomplete="tel">
+                <span class="error" data-for="phone">Please enter a phone number.</span>
+              </div>
+            </div>
+            <div class="field">
+              <label for="email">Email <span class="req">*</span></label>
+              <input type="email" id="email" name="email" autocomplete="email">
+              <span class="error" data-for="email">Please enter a valid email.</span>
+            </div>
+            <div class="two">
+              <div class="field">
+                <label for="property">Property type</label>
+                <select id="property" name="property">
+                  <option>Home</option>
+                  <option>Strata unit</option>
+                  <option>Laneway or secondary suite</option>
+                  <option>Small institution</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="service">Service needed <span class="req">*</span></label>
+                <select id="service" name="service">
+                  <option value="">Select one</option>
+                  <option>Panel upgrade or service change</option>
+                  <option>Rewiring or repair</option>
+                  <option>EV charger installation</option>
+                  <option>Lighting and fixtures</option>
+                  <option>Diagnostics or troubleshooting</option>
+                  <option>Institutional troubleshooting</option>
+                  <option>Something else</option>
+                </select>
+                <span class="error" data-for="service">Please choose a service.</span>
+              </div>
+            </div>
+            <div class="field">
+              <label for="message">What is happening?</label>
+              <textarea id="message" name="message" placeholder="Breakers tripping, adding circuits, panel age, deadlines, anything useful."></textarea>
+            </div>
+            <div class="field">
+              <label>Preferred contact</label>
+              <div class="radios">
+                <label><input type="radio" name="prefer" value="Phone" checked> Phone</label>
+                <label><input type="radio" name="prefer" value="Email"> Email</label>
+              </div>
+            </div>
+            <button type="submit" class="form__submit">Request a quote</button>
+          </form>
+
+          <div class="form-success" id="formSuccess" role="status" aria-live="polite">
+            <div class="tick"><svg viewBox="0 0 24 24" width="26" height="26"><path d="M4 12.5l5 5L20 6"/></svg></div>
+            <h3>Request received.</h3>
+            <p>Thanks. We will get back to you within one business day. For anything urgent, call (604) 555-0142.</p>
+            <button type="button" id="resetForm">Send another request</button>
+          </div>
+        </div>
+
+        <aside class="infocard">
+          <h3>Reach us directly</h3>
+          <div class="inforow"><span class="k">Phone</span><a class="v" href="tel:+16045550142">(604) 555-0142</a></div>
+          <div class="inforow"><span class="k">Email</span><a class="v" href="mailto:service@qce.ca">service@qce.ca</a></div>
+          <div class="inforow"><span class="k">Hours</span><span class="v">Mon to Fri, 7:30 to 5:00<br>Emergency line after hours</span></div>
+          <div class="inforow"><span class="k">Service area</span><span class="v">Vancouver &amp; Lower Mainland</span></div>
+          <div class="inforow"><span class="k">License</span><span class="v">FSR Class A · Licensed &amp; insured</span></div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer on-dark">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <svg class="lockup" viewBox="0 0 244 98" width="186" role="img" aria-label="QCE, Quality Control Electrical, Vancouver BC">
+          <text x="62" y="44" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="700" font-size="48" letter-spacing="-1.5" fill="currentColor">QCE</text>
+          <path d="M40 9 L29 28 L36 28 L31.5 42 L50 23 L41.5 23 L47 9 Z" fill="var(--current)"/>
+          <line x1="14" y1="57" x2="230" y2="57" stroke="currentColor" stroke-width="1.5"/>
+          <text x="122" y="74" text-anchor="middle" font-family="'Inter',sans-serif" font-weight="600" font-size="11.5" letter-spacing="2.2" fill="currentColor">QUALITY CONTROL ELECTRICAL</text>
+          <line x1="64" y1="89" x2="92" y2="89" stroke="currentColor" stroke-width="1"/>
+          <text x="122" y="92.5" text-anchor="middle" font-family="'Inter',sans-serif" font-size="9" letter-spacing="2" fill="rgba(255,255,255,.7)">VANCOUVER • BC</text>
+          <line x1="28" y1="89" x2="50" y2="89" stroke="rgba(255,255,255,.5)" stroke-width="1"/>
+          <line x1="194" y1="89" x2="216" y2="89" stroke="rgba(255,255,255,.5)" stroke-width="1"/>
+        </svg>
+        <p>Licensed electrical work for homes and small institutions across Vancouver and the Lower Mainland.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Site</h4>
+        <ul>
+          <li><a href="#home" data-route="home">Home</a></li>
+          <li><a href="#about" data-route="about">About</a></li>
+          <li><a href="#contact" data-route="contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#home" data-route="home">Panel upgrades</a></li>
+          <li><a href="#home" data-route="home">Rewiring</a></li>
+          <li><a href="#home" data-route="home">EV chargers</a></li>
+          <li><a href="#home" data-route="home">Diagnostics</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="tel:+16045550142">(604) 555-0142</a></li>
+          <li><a href="mailto:service@qce.ca">service@qce.ca</a></li>
+          <li>Mon to Fri, 7:30 to 5:00</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="year"></span> Quality Control Electrical</span>
+      <span>Vancouver • BC</span>
+      <span>FSR Class A · Licensed &amp; Insured</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var pages = document.querySelectorAll(".page");
+  var navLinks = document.querySelectorAll(".nav__link");
+  var routeEls = document.querySelectorAll("[data-route]");
+  var body = document.body;
+  var toggle = document.getElementById("navToggle");
+  var validRoutes = ["home","about","contact"];
+
+  function closeMenu(){
+    body.classList.remove("menu-open");
+    toggle.setAttribute("aria-expanded","false");
+    toggle.setAttribute("aria-label","Open menu");
+  }
+
+  function showPage(route, push){
+    if(validRoutes.indexOf(route) === -1){ route = "home"; }
+    pages.forEach(function(p){ p.classList.toggle("is-active", p.id === route); });
+    navLinks.forEach(function(l){
+      if(l.getAttribute("data-route") === route){ l.setAttribute("aria-current","page"); }
+      else { l.removeAttribute("aria-current"); }
+    });
+    if(push !== false && location.hash !== "#"+route){
+      history.pushState(null,"","#"+route);
+    }
+    window.scrollTo({top:0,left:0,behavior:"auto"});
+    closeMenu();
+    runReveal();
+    var main = document.getElementById("main");
+    if(main){ main.setAttribute("tabindex","-1"); main.focus({preventScroll:true}); }
+  }
+
+  routeEls.forEach(function(el){
+    el.addEventListener("click", function(e){
+      var r = el.getAttribute("data-route");
+      if(r){ e.preventDefault(); showPage(r, true); }
+    });
+  });
+
+  window.addEventListener("popstate", function(){
+    showPage((location.hash || "#home").slice(1), false);
+  });
+
+  toggle.addEventListener("click", function(){
+    var open = body.classList.toggle("menu-open");
+    toggle.setAttribute("aria-expanded", open ? "true":"false");
+    toggle.setAttribute("aria-label", open ? "Close menu":"Open menu");
+  });
+
+  // ----- scroll reveal -----
+  var io = null;
+  if("IntersectionObserver" in window){
+    io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){ en.target.classList.add("is-visible"); io.unobserve(en.target); }
+      });
+    },{threshold:0.12, rootMargin:"0px 0px -40px 0px"});
+  }
+  function runReveal(){
+    var items = document.querySelectorAll(".page.is-active .reveal:not(.is-visible)");
+    if(io){ items.forEach(function(i){ io.observe(i); }); }
+    else { items.forEach(function(i){ i.classList.add("is-visible"); }); }
+  }
+
+  // ----- contact form -----
+  var form = document.getElementById("quoteForm");
+  var success = document.getElementById("formSuccess");
+
+  function setError(id, on){
+    var input = document.getElementById(id);
+    var err = document.querySelector('.error[data-for="'+id+'"]');
+    if(input){ input.setAttribute("aria-invalid", on ? "true":"false"); }
+    if(err){ err.classList.toggle("show", on); }
+  }
+
+  function validEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+
+  if(form){
+    form.addEventListener("submit", function(e){
+      e.preventDefault();
+      var ok = true;
+      var name = document.getElementById("name").value.trim();
+      var phone = document.getElementById("phone").value.trim();
+      var email = document.getElementById("email").value.trim();
+      var service = document.getElementById("service").value;
+
+      if(!name){ setError("name",true); ok=false; } else setError("name",false);
+      if(phone.replace(/\D/g,"").length < 7){ setError("phone",true); ok=false; } else setError("phone",false);
+      if(!validEmail(email)){ setError("email",true); ok=false; } else setError("email",false);
+      if(!service){ setError("service",true); ok=false; } else setError("service",false);
+
+      if(!ok){
+        var firstBad = form.querySelector('[aria-invalid="true"]');
+        if(firstBad){ firstBad.focus(); }
+        return;
+      }
+      form.style.display = "none";
+      success.classList.add("show");
+      success.focus && success.focus();
+    });
+  }
+
+  var resetBtn = document.getElementById("resetForm");
+  if(resetBtn){
+    resetBtn.addEventListener("click", function(){
+      form.reset();
+      ["name","phone","email","service"].forEach(function(id){ setError(id,false); });
+      success.classList.remove("show");
+      form.style.display = "block";
+      document.getElementById("name").focus();
+    });
+  }
+
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  // initial route
+  showPage((location.hash || "#home").slice(1), false);
+})();
+</script>
+</body>
+</html>
